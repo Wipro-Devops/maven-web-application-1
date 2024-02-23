@@ -1,0 +1,33 @@
+node 
+{
+    def mavenHome = tool name: "maven-3.9.6"
+   //properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '9', daysToKeepStr: '8', numToKeepStr: '')), pipelineTriggers([pollSCM('* * * * * ')])])
+  //  properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '10', daysToKeepStr: '', numToKeepStr: '10')), pipelineTriggers([pollSCM('* * * * * ')])])
+    stage('get code from github')
+    {
+        git branch: 'development', credentialsId: '78ee7929-e79c-4c2d-981c-4066371470dd', url: 'https://github.com/Wipro-Devops/maven-web-application-1.git'
+    }
+    
+    stage('build')
+    {
+        sh "${mavenHome}/bin/mvn clean package"
+    }
+    /*
+    stage('Sonarexceution')
+    {
+        sh "${mavenHome}/bin/mvn sonar:sonar"
+    }
+    stage('NexusRepo')
+    {
+        sh "${mavenHome}/bin/mvn deploy"
+    }
+    
+    stage('Tomcat Upload')
+    {
+        sshagent(['cf9562a6-7865-4d6d-a9c3-7afbefa1cbfb']) 
+   {
+        sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@52.66.104.144:/opt/apache-tomcat-9.0.85/webapps/"
+    }   
+   }
+    */
+}   
